@@ -27,16 +27,21 @@ app.use('/api', require('./routes/productRouter'))
 app.use('/api', require('./routes/paymentRouter'))
 
 //connect mongoose DB
-const URI = process.env.MONGODB_URL
-mongoose.connect(URI, {
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}, err => {
-    if(err) throw err;
-    console.log('Kết nối thành công Database Monggo');
-})
+const URI = process.env.MONGODB_URL;
+
+async function connectToDatabase() {
+  try {
+    await mongoose.connect(URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('Connected to the database');
+  } catch (error) {
+    console.error('Failed to connect to the database:', error);
+  }
+}
+
+connectToDatabase();
 
 if(process.env.NODE_ENV === 'production'){
     app.use(express.static('client/build'))
