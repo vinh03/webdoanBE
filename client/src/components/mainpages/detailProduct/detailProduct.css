@@ -1,0 +1,63 @@
+.detail {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 50px 12px;
+  font-size: 150%;
+}
+.detail img {
+  max-width: 400px;
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  display: block;
+}
+.box-detail {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 20px;
+}
+.box-detail .row {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.detail-price {
+  margin: 12px 0;
+  color: red;
+  font-weight: 500;
+}
+
+.detail-sold{
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+}
+
+.box-detail h2 {
+  text-transform: uppercase;
+  color: darkblue;
+  letter-spacing: 2px;
+  font-weight: 2rem;
+  font-size: 24px;
+}
+.box-detail p {
+  line-height: 1.5;
+  margin: 10px 0;
+  opacity: 1;
+  color: #333;
+  font-size: 16px;
+}
+.box-detail .cart {
+  background: #333;
+  color: white;
+  margin-top: 10px;
+  padding: 10px 25px;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
