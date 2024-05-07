@@ -14,8 +14,8 @@ function Cart() {
   const [total, setTotal] = useState(0);
 
   const stripePromise = loadStripe(
-    process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
-  );
+    'pk_live_51M3AJQFFiikAFi4P8WweVjrOZqGTkEd35mmtme5M7IKGA4twiSPYuJ2IebBzwEyj8foXcmASqkoTNFoR9HcWCZMH00Ko51fjds'
+);
 
   const addToCart = async (updatedCart) => {
     await axios.patch(
