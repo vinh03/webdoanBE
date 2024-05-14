@@ -4,19 +4,103 @@ const Payments = require("../models/paymentModal");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userCtrl = {
+  // register: async (req, res) => {
+  //   try {
+  //     const { name, email, password } = req.body;
+
+  //     const user = await Users.findOne({ email });
+
+  //     if (user) return res.status(400).json({ msg: "Email đã được đăng ký" });
+
+  //     if (password.length < 6)
+  //       return res
+  //         .status(400)
+  //         .json({ msg: "Mật khẩu không được ít hơn 6 ký tự." });
+
+  //     // Mã hóa mật khẩu
+  //     const passwordHash = await bcrypt.hash(password, 10);
+  //     const newUser = new Users({
+  //       name,
+  //       email,
+  //       password: passwordHash,
+  //     });
+  //     await newUser.save();
+
+  //     //Tạo token để xác thực
+  //     const accesstoken = createAccessToken({ id: newUser._id });
+  //     const refreshtoken = createRefreshToken({ id: newUser._id });
+
+  //     res.cookie("refreshtoken", refreshtoken, {
+  //       httpOnly: true,
+  //       path: "/user/refresh_token",
+  //       maxAge: 7 * 24 * 60 * 60 * 1000 // 7days
+  //     });
+
+  //     res.json(accesstoken);
+  //   } catch (error) {
+  //     return res.status(500).json({ msg: error.message });
+  //   }
+  // },
+
+  // login: async (req, res) => {
+  //   try {
+  //     const { email, password } = req.body;
+
+  //     const user = await Users.findOne({ email });
+
+  //     if (!user)
+  //       return res.status(400).json({ msg: "Người dùng không tồn tại." });
+
+  //     isMatch = await bcrypt.compare(password, user.password);
+  //     if (!isMatch) return res.status(400).json({ msg: "Sai mật khẩu." });
+
+  //     const accesstoken = createAccessToken({ id: user._id });
+  //     const refreshtoken = createRefreshToken({ id: user._id });
+  //     res.cookie("refreshtoken", refreshtoken, {
+  //       httpOnly: true,
+  //       path: "/user/refresh_token",
+  //       maxAge: 7 * 24 * 60 * 60 * 1000
+  //     });
+
+  //     res.json(accesstoken);
+  //   } catch (error) {
+  //     return res.status(500).json({ msg: error.message });
+  //   }
+  // },
+
+
+  login: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+  
+      const user = await Users.findOne({ email });
+  
+      if (!user)
+        return res.status(400).json({ msg: "Người dùng không tồn tại." });
+  
+      isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) return res.status(400).json({ msg: "Sai mật khẩu." });
+  
+      const accesstoken = createAccessToken({ id: user._id });
+      res.json(accesstoken);
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
+  
   register: async (req, res) => {
     try {
       const { name, email, password } = req.body;
-
+  
       const user = await Users.findOne({ email });
-
+  
       if (user) return res.status(400).json({ msg: "Email đã được đăng ký" });
-
+  
       if (password.length < 6)
         return res
           .status(400)
           .json({ msg: "Mật khẩu không được ít hơn 6 ký tự." });
-
+  
       // Mã hóa mật khẩu
       const passwordHash = await bcrypt.hash(password, 10);
       const newUser = new Users({
@@ -25,52 +109,15 @@ const userCtrl = {
         password: passwordHash,
       });
       await newUser.save();
-
+  
       //Tạo token để xác thực
       const accesstoken = createAccessToken({ id: newUser._id });
-      const refreshtoken = createRefreshToken({ id: newUser._id });
-
-      res.cookie("refreshtoken", refreshtoken, {
-        httpOnly: true,
-        path: "/user/refresh_token",
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7days
-      });
-
+  
       res.json(accesstoken);
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }
   },
-
-  login: async (req, res) => {
-    try {
-      const { email, password } = req.body;
-
-      const user = await Users.findOne({ email });
-
-      if (!user)
-        return res.status(400).json({ msg: "Người dùng không tồn tại." });
-
-      isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) return res.status(400).json({ msg: "Sai mật khẩu." });
-
-      const accesstoken = createAccessToken({ id: user._id });
-      const refreshtoken = createRefreshToken({ id: user._id });
-
-      console.log('Cookies received:', req.cookies); // Debugging log
-      console.log(refreshtoken);
-      res.cookie("refreshtoken", refreshtoken, {
-        httpOnly: true,
-        path: "/user/refresh_token",
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7days
-      });
-
-      res.json(accesstoken);
-    } catch (error) {
-      return res.status(500).json({ msg: error.message });
-    }
-  },
-
   logout: async (req, res) => {
     try {
       res.clearCookie('refreshtoken', {path: "/user/refresh_token"});
@@ -82,7 +129,6 @@ const userCtrl = {
 
   refreshToken: (req, res) => {
     try {
-      console.log('Cookies received:', req.cookies); // Debugging log
       const rf_token = req.cookies.refreshtoken;
       if (!rf_token) {
         console.log('No refresh token found in cookies');
