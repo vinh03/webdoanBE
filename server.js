@@ -9,12 +9,16 @@ const bodyParser = require('body-parser');
 
 const path = require('path');
 
+const corsOptions = {
+  origin: 'https://ui-shop.vercel.app/',
+  optionsSuccessStatus: 200,
+};
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser())
 app.use(bodyParser.raw({ type: 'application/json' }));
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(fileUpload({
     useTempFiles: true,
 }))
@@ -40,10 +44,12 @@ async function connectToDatabase() {
     console.error('Failed to connect to the database:', error);
   }
 }
-app.use(function(req, res, next) {
-  res.setHeader('Permissions-Policy', 'attribution-reporting=*, run-ad-auction=*, join-ad-interest-group=*, browsing-topics=*');
-  next();
+app.all('/', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next()
 });
+
 connectToDatabase();
 
 if(process.env.NODE_ENV === 'production'){
