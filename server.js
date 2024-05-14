@@ -40,14 +40,26 @@ async function connectToDatabase() {
     console.error('Failed to connect to the database:', error);
   }
 }
-
+app.use(function(req, res, next) {
+  const allowedOrigins = ['https://deploymentshop.onrender.com', 'https://ui-shop.vercel.app/'];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header('Access-Control-Expose-Headers', 'agreementrequired');
+  next();
+});
 connectToDatabase();
 
 if(process.env.NODE_ENV === 'production'){
+  
     app.use(express.static('client/build'))
     app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
-    })
+    });
+   
 }
 
 const PORT = process.env.PORT || 5000
