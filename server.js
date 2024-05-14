@@ -45,12 +45,6 @@ async function connectToDatabase() {
 
 connectToDatabase();
 
-app.use((req, res, next) => {
-  console.log('Request Origin:', req.headers.origin);
-  console.log('Request URL:', req.url);
-  next();
-});
-
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client', 'build')));
   app.get('*', (req, res) => {
