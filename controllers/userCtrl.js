@@ -80,21 +80,24 @@ const userCtrl = {
 
   refreshToken: (req, res) => {
     try {
-      console.log('Cookies:', req.cookies);
+      console.log('Cookies received:', req.cookies); // Debugging log
       const rf_token = req.cookies.refreshtoken;
-      if (!rf_token)
+      if (!rf_token) {
+        console.log('No refresh token found in cookies');
         return res.status(400).json({ msg: "Hãy đăng nhập hoặc đăng ký" });
-      
+      }
+  
       jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-        if (err)
+        if (err) {
+          console.log('Error verifying refresh token:', err);
           return res.status(400).json({ msg: "Hãy đăng nhập hoặc đăng ký" });
+        }
+  
         const accesstoken = createAccessToken({ id: user.id });
-
         res.json({ accesstoken });
       });
-
-      res.json({ rf_token });
     } catch (error) {
+      console.error('Error in refresh token endpoint:', error);
       return res.status(500).json({ msg: error.message });
     }
   },
