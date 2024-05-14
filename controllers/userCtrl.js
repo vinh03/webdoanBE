@@ -57,8 +57,10 @@ const userCtrl = {
       const accesstoken = createAccessToken({ id: user._id });
       const refreshtoken = createRefreshToken({ id: user._id });
 
+      console.log('Cookies received:', req.cookies); // Debugging log
+      console.log(refreshtoken);
       res.cookie("refreshtoken", refreshtoken, {
-        httpOnly: false,
+        httpOnly: true,
         path: "/user/refresh_token",
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7days
       });
