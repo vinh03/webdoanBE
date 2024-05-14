@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const corsOptions = {
-  origin: 'https://ui-shop.vercel.app',
+  origin: 'https://webdoan-ui.vercel.app',
   optionsSuccessStatus: 200,
   credentials: true,
 };
