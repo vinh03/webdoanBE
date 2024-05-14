@@ -10,6 +10,7 @@ const path = require('path');
 const corsOptions = {
   origin: 'https://ui-shop.vercel.app',
   optionsSuccessStatus: 200,
+  credentials: true,
 };
 
 const app = express();

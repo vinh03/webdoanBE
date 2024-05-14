@@ -80,10 +80,11 @@ const userCtrl = {
 
   refreshToken: (req, res) => {
     try {
+      console.log('Cookies:', req.cookies);
       const rf_token = req.cookies.refreshtoken;
       if (!rf_token)
         return res.status(400).json({ msg: "Hãy đăng nhập hoặc đăng ký" });
-
+      
       jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
         if (err)
           return res.status(400).json({ msg: "Hãy đăng nhập hoặc đăng ký" });
